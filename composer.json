@@ -1,0 +1,30 @@
+{
+    "name": "phone2action/ym-api",
+    "description": "YourMembership API PHP Library",
+    "type": "library",
+    "require-dev": {
+        "codeception/codeception": "^2.2",
+        "codeception/mockery-module": "^0.2.2"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Peter Arapov",
+            "email": "petr@phone2action.com"
+        }
+    ],
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/phone2action/ym-api"
+        }
+    ],
+
+    "autoload": {
+        "psr-0" : {
+            "P2A\\YourMembership" : "src"
+        }
+    },
+    "minimum-stability": "dev",
+    "require": {}
+}
