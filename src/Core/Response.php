@@ -84,7 +84,7 @@ class Response
             $count  = $attributes['ResultTotal'] ?? false;
         }
 
-        return count;
+        return $count;
     }
 
 }

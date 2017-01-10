@@ -81,7 +81,15 @@ class Request
 
         return $call;
     }
-
+    /**
+     * Builds The XML Request Body for the Your Membership API Call
+     * @method buildXMLBody
+     * @author PA
+     * @date   2017-01-10
+     * @param  string            $method    Your Membership API Function Name
+     * @param  array             $arguments Your Membership Arguments
+     * @return SimpleXMLElement
+     */
     public function buildXMLBody(string $method, array $arguments) : \SimpleXMLElement
     {
         $xml = $this->buildBasePayload(); // Common Envelope
