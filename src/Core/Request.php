@@ -38,7 +38,7 @@ class Request
      * @method buildBasePayload
      * @author PA
      * @date   2017-01-09
-     * @return SimpleXMLElement  XML Envelope with necessary credential parameters
+     * @return \SimpleXMLElement  XML Envelope with necessary credential parameters
      */
     public function buildBasePayload() : \SimpleXMLElement
     {
@@ -72,11 +72,11 @@ class Request
     {
         //Create Call Node
         $call = new \SimpleXMLElement('<Call> </Call>');
-        $call->addAttribute('Method',$method);
+        $call->addAttribute('Method', $method);
 
         //Add Arguments to the Call Node
         foreach ($arguments as $key => $value) {
-            $call->addChild($key,$value);
+            $call->addChild($key, $value);
         }
 
         return $call;
@@ -88,7 +88,7 @@ class Request
      * @date   2017-01-10
      * @param  string            $method    Your Membership API Function Name
      * @param  array             $arguments Your Membership Arguments
-     * @return SimpleXMLElement
+     * @return \SimpleXMLElement
      */
     public function buildXMLBody(string $method, array $arguments) : \SimpleXMLElement
     {
@@ -101,7 +101,7 @@ class Request
         $callPayload = $this->createCallPayload($method, $arguments); // Specific API Call Envelope
 
         // Put Api call into common envelope
-        $this->sxmlAppend($xml,$callPayload);
+        $this->sxmlAppend($xml, $callPayload);
 
         return $xml;
     }
@@ -143,11 +143,11 @@ class Request
      * @method sxmlAppend
      * @author PA
      * @date   2017-01-09
-     * @param  SimpleXMLElement $to
-     * @param  SimpleXMLElement $from
+     * @param  \SimpleXMLElement $to
+     * @param  \SimpleXMLElement $from
      * @return void
      */
-    private function sxmlAppend(\SimpleXMLElement $to, \SimpleXMLElement $from)  {
+    private function sxmlAppend(\SimpleXMLElement $to, \SimpleXMLElement $from) {
         $toDom = dom_import_simplexml($to);
         $fromDom = dom_import_simplexml($from);
         $toDom->appendChild($toDom->ownerDocument->importNode($fromDom, true));
@@ -166,7 +166,8 @@ class Request
         return $requestXML;
     }
 
-    public function isSessionActive() {
+    public function isSessionActive()
+    {
         return self::$sessionID;
     }
 
