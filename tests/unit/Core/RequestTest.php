@@ -23,14 +23,15 @@ class RequestTest extends \Codeception\Test\Unit
 
         $apiKey = 'A';
         $saPasscode  ='B';
+        $callId = '0';
         $request = new Request($apiKey, $saPasscode);
 
         $xml =  $request->buildBasePayload();
 
-        $this->assertEquals(Request::$API_VERSION, $xml->Version, 'Versions Do Not Match');
+        $this->assertEquals(Request::API_VERSION, $xml->Version, 'Versions Do Not Match');
         $this->assertEquals($apiKey, $xml->ApiKey, 'API Key Does not Match');
         $this->assertEquals($saPasscode, $xml->SaPasscode,'Sa Passcode Does not match');
-        $this->assertEquals('1', $xml->CallID, 'Call ID does not match');
+        $this->assertEquals($callId, (string) $xml->CallID, 'Call ID does not match');
 
         codecept_debug($xml->asXML());
     }
@@ -50,8 +51,8 @@ class RequestTest extends \Codeception\Test\Unit
         $attributes = $xml->attributes();
 
         //Verify Method Signature
-        $this->assertNotEmpty($attributes['method'], 'Call Method Incorrect');
-        $this->assertEquals($method, $attributes['method'], 'Call Method Incorrect');
+        $this->assertNotEmpty($attributes['Method'], 'Call Method Incorrect');
+        $this->assertEquals($method, $attributes['Method'], 'Call Method Incorrect');
 
         $children = $xml->children();
         //Verify Method Arguments
@@ -64,28 +65,29 @@ class RequestTest extends \Codeception\Test\Unit
         codecept_debug($xml->asXML());
     }
 
-    public function testBuildXMLPayload() {
+    public function testBuildXMLBody() {
 
         $apiKey = 'A';
         $saPasscode  ='B';
+        $callId = '0';
         $method = 'testMethod';
         $arguments = ['arg1' => 'value1', 'arg2' => 'value2'];
-        $request = new Request($apiKey, $saPasscode);
+        $request = new Request($apiKey, $saPasscode, $callId);
 
-        $xml = $request->buildXMLPayload($method,$arguments);
+        $xml = $request->buildXMLBody($method, $arguments, $callId);
         codecept_debug($xml->asXML());
         //Verify
-        $this->assertEquals(Request::$API_VERSION, $xml->Version, 'Versions Do Not Match');
+        $this->assertEquals(Request::API_VERSION, $xml->Version, 'Versions Do Not Match');
         $this->assertEquals($apiKey, $xml->ApiKey, 'API Key Does not Match');
         $this->assertEquals($saPasscode, $xml->SaPasscode,'Sa Passcode Does not match');
-        $this->assertEquals('1', $xml->CallID, 'Call ID does not match');
+        $this->assertEquals($callId, $xml->CallID, 'Call ID does not match');
 
 
         $attributes = $xml->Call->attributes();
 
         //Verify Method Signature
-        $this->assertNotEmpty($attributes['method'], 'Call Method Incorrect');
-        $this->assertEquals($method, $attributes['method'], 'Call Method Incorrect');
+        $this->assertNotEmpty($attributes['Method'], 'Call Method Incorrect');
+        $this->assertEquals($method, $attributes['Method'], 'Call Method Incorrect');
 
         $children = $xml->Call->children();
         //Verify Method Arguments
