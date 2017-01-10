@@ -1,11 +1,7 @@
 {
     "name": "phone2action/ym-api",
     "description": "YourMembership API PHP Library",
-    "type": "library",
-    "require-dev": {
-        "codeception/codeception": "^2.2",
-        "codeception/mockery-module": "^0.2.2"
-    },
+
     "license": "MIT",
     "authors": [
         {
@@ -21,10 +17,18 @@
     ],
 
     "autoload": {
-        "psr-0" : {
-            "P2A\\YourMembership" : "src"
+        "psr-4" : {
+            "P2A\\YourMembership\\" : "src/"
         }
     },
     "minimum-stability": "dev",
-    "require": {}
+    "require": {
+        "php": ">=7.0.0",
+        "nesbot/carbon": "^1.21",
+        "illuminate/support": "^5.2"
+    },
+    "require-dev": {
+        "codeception/codeception": "^2.2",
+        "codeception/mockery-module": "^0.2.2"
+    }
 }
