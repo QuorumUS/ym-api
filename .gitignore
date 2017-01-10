@@ -15,3 +15,4 @@ bootstrap/cache/
 .rocketeer/
 
 tests/_output/*
+/c3.php
