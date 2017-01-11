@@ -10,19 +10,15 @@ class Response
     private $method;
     private $response;
 
-    public function __construct(string $method, $response)
+    public function __construct(string $method,  $response)
     {
-
         $this->method = $method;
 
-        $body = $response->getBody();
-        codecept_debug($body);
+        $body = $response->getBody()->getContents();
         $this->response = new \SimpleXMLElement($body);
-        codecept_debug($this->response->asXml());
-        if ($this->hasError()) {
-            throw new YourMembershipException($this->getError(), $this->getErrorCode(), $this->method);
-        }
+
     }
+
     /**
      * Checks if the response contains an Error
      * @method hasError
@@ -46,6 +42,7 @@ class Response
     {
         return (int) $this->response->ErrCode;
     }
+
     /**
      * Fetches the Error Message From Response
      * @method getError
@@ -55,18 +52,54 @@ class Response
      */
     public function getError() : string
     {
-        return (string) $this->response->ErrDesc;
+        return (string)$this->response->ErrDesc;
     }
+
     /**
      * Converts the response to an Array
      * @method toArray
+     * @throws YourMembershipException
      * @author PA
      * @date   2017-01-10
      * @return array      Response
      */
     public function toArray() : array
     {
-        return json_decode(json_encode($this->response->{$this->method}), TRUE);
+        return $this->unwrapXMLObject(true);
+    }
+
+    /**
+     * Converts the response to an Object
+     * @method toObject
+     * @throws YourMembershipException
+     * @author PA
+     * @date   2017-01-11
+     * @return stdClass  Response
+     */
+    public function toObject() : \stdClass
+    {
+        return $this->unwrapXMLObject(false);
+    }
+
+    /**
+     * Unwraps XML Object into either StdClass or Array
+     * Lossy conversion, attributes are lost from XML
+     *
+     * @method unwrapXMLObject
+     * @throws YourMembershipException
+     * @author PA
+     * @date   2017-01-11
+     * @param  bool            $asArray [description]
+     * @return [type]                   [description]
+     */
+    private function unwrapXMLObject(bool $asArray)
+    {
+        //We cannot unwrap objects that have errors, so throw an exception
+        if ($this->hasError()) {
+            throw new YourMembershipException($this->getError(), $this->getErrorCode(), $this->method);
+        }
+
+        return json_decode(json_encode($this->response->{$this->method}), $asArray);
     }
     /**
      * Returns the Result Count
@@ -75,13 +108,13 @@ class Response
      * @date   2017-01-10
      * @return int|false   false if no ResultCount is present
      */
-    public function getResultCount()
+    public function getResultCount() : int
     {
         $count = false;
 
-        if (isset($this->response->Results)) {
-            $attributes = $this->response->Results->getAttributes();
-            $count = $attributes['ResultTotal'] ?? false;
+        if (isset($this->response->{$this->method}->Results)) {
+            $attributes = $this->response->{$this->method}->Results->attributes();
+            $count  = (int) $attributes['ResultTotal'] ?? false;
         }
 
         return $count;

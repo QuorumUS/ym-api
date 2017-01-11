@@ -1,5 +1,5 @@
 <?php
-
+namespace Core;
 use P2A\YourMembership\Core\Request;
 
 class RequestTest extends \Codeception\Test\Unit
@@ -72,9 +72,9 @@ class RequestTest extends \Codeception\Test\Unit
         $callId = '0';
         $method = 'testMethod';
         $arguments = ['arg1' => 'value1', 'arg2' => 'value2'];
-        $request = new Request($apiKey, $saPasscode, $callId);
+        $request = new Request($apiKey, $saPasscode);
 
-        $xml = $request->buildXMLBody($method, $arguments, $callId);
+        $xml = $request->buildXMLBody($method, $arguments);
         codecept_debug($xml->asXML());
         //Verify
         $this->assertEquals(Request::API_VERSION, $xml->Version, 'Versions Do Not Match');
@@ -100,5 +100,29 @@ class RequestTest extends \Codeception\Test\Unit
         codecept_debug($xml->asXML());
     }
 
+    public function testBuildRequest()
+    {
+        $apiKey = 'A';
+        $saPasscode  ='B';
+        $callId = '0';
+        $method = 'testMethod';
+        $arguments = ['arg1' => 'value1', 'arg2' => 'value2'];
+        $request = new Request($apiKey, $saPasscode);
+
+        $request->buildXMLBody($method,$arguments);
+
+        $request = $request->buildRequest($method,$arguments);
+
+        $this->assertInstanceOf(\GuzzleHttp\Psr7\Request::class, $request);
+
+    }
+
+    public function testHasSession()
+    {
+        $this->assertFalse(Request::hasSession());
+        Request::setSessionId('A');
+        $this->assertTrue(Request::hasSession());
+
+    }
 
 }

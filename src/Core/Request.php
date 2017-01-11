@@ -15,19 +15,29 @@ class Request
     const BASE_URL = 'https://api.yourmembership.com';
     const API_VERSION = '2.25';
 
-    private static $sessionId;
+    /**
+     * Session ID use for YourMembership API
+     * @var string
+     */
+    private static $sessionId = null;
     /**
      * Call Counter for Your Membership for a given session
      * @var integer
      */
     public static $callId = 0;
-
+    /**
+     * API Key Used for YourMembership API
+     * @var string
+     */
     private $apiKey;
+    /**
+     * Sa Passcode is a supplementary API key used for YourMembership API
+     * @var string
+     */
     private $saPasscode;
-    private $version;
 
 
-    function __construct(string $apiKey, string $saPasscode)
+    public function __construct(string $apiKey, string $saPasscode)
     {
         $this->apiKey = $apiKey;
         $this->saPasscode = $saPasscode;
@@ -38,7 +48,7 @@ class Request
      * @method buildBasePayload
      * @author PA
      * @date   2017-01-09
-     * @return \SimpleXMLElement  XML Envelope with necessary credential parameters
+     * @return SimpleXMLElement  XML Envelope with necessary credential parameters
      */
     public function buildBasePayload() : \SimpleXMLElement
     {
@@ -72,15 +82,16 @@ class Request
     {
         //Create Call Node
         $call = new \SimpleXMLElement('<Call> </Call>');
-        $call->addAttribute('Method', $method);
+        $call->addAttribute('Method',$method);
 
         //Add Arguments to the Call Node
         foreach ($arguments as $key => $value) {
-            $call->addChild($key, $value);
+            $call->addChild($key,$value);
         }
 
         return $call;
     }
+
     /**
      * Builds The XML Request Body for the Your Membership API Call
      * @method buildXMLBody
@@ -88,7 +99,7 @@ class Request
      * @date   2017-01-10
      * @param  string            $method    Your Membership API Function Name
      * @param  array             $arguments Your Membership Arguments
-     * @return \SimpleXMLElement
+     * @return SimpleXMLElement
      */
     public function buildXMLBody(string $method, array $arguments) : \SimpleXMLElement
     {
@@ -101,15 +112,22 @@ class Request
         $callPayload = $this->createCallPayload($method, $arguments); // Specific API Call Envelope
 
         // Put Api call into common envelope
-        $this->sxmlAppend($xml, $callPayload);
+        $this->sxmlAppend($xml,$callPayload);
 
         return $xml;
     }
-
-    public function buildRequest(string $method, array $arguments) : GuzzleRequest
+    /**
+     * Builds a Guzzle Request Object
+     * @method buildRequest
+     * @author PA
+     * @date   2017-01-11
+     * @param  string        $method    YourMembership API Method
+     * @param  array         $arguments YourMembership API Method Call Arguments
+     * @return \GuzzleHttp\Psr7\Request            Guzzle Request Object
+     */
+    public function buildRequest(string $method, array $arguments) : \GuzzleHttp\Psr7\Request
     {
         $requestBody = $this->buildXMLBody($method, $arguments)->asXML();
-        codecept_debug($requestBody);
         return new GuzzleRequest('POST', self::BASE_URL, ['Content-Type' => 'application/x-www-form-urlencoded; charset=UTF8'], $requestBody);
     }
 
@@ -123,19 +141,8 @@ class Request
      */
     public function isSessionRequiredForMethod(string $method) : bool
     {
+        //TODO Add config Logic for what API Methods require Session ID
         return ($method != 'Session.Create');
-    }
-
-    /**
-     * Setter Method for SessionID
-     * @method setSessionId
-     * @author PA
-     * @date   2017-01-10
-     * @param  string       $sessionId [description]
-     */
-    public static function setSessionId(string $sessionId)
-    {
-        self::$sessionId = $sessionId;
     }
 
     /**
@@ -143,11 +150,11 @@ class Request
      * @method sxmlAppend
      * @author PA
      * @date   2017-01-09
-     * @param  \SimpleXMLElement $to
-     * @param  \SimpleXMLElement $from
+     * @param  SimpleXMLElement $to
+     * @param  SimpleXMLElement $from
      * @return void
      */
-    private function sxmlAppend(\SimpleXMLElement $to, \SimpleXMLElement $from) {
+    private function sxmlAppend(\SimpleXMLElement $to, \SimpleXMLElement $from)  {
         $toDom = dom_import_simplexml($to);
         $fromDom = dom_import_simplexml($from);
         $toDom->appendChild($toDom->ownerDocument->importNode($fromDom, true));
@@ -166,9 +173,28 @@ class Request
         return $requestXML;
     }
 
-    public function isSessionActive()
+
+    /**
+     * Setter Method for SessionID
+     * @method setSessionId
+     * @author PA
+     * @date   2017-01-10
+     * @param  string       $sessionId YourMembership Session ID
+     */
+    public static function setSessionId(string $sessionId)
     {
-        return self::$sessionID;
+        self::$sessionId = $sessionId;
+    }
+
+    /**
+     * Checks if we have an active session available
+     * @method hasSession
+     * @author PA
+     * @date   2017-01-11
+     * @return boolean
+     */
+    public function hasSession() {
+        return !is_null(self::$sessionId);
     }
 
 };

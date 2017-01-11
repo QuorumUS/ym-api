@@ -1,7 +1,7 @@
 {
     "name": "phone2action/ym-api",
     "description": "YourMembership API PHP Library",
-
+    "type": "library",
     "license": "MIT",
     "authors": [
         {
