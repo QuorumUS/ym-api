@@ -13,12 +13,12 @@
         "name": "Peter Arapov",
         "email": "petr@phone2action.com"
     }],
-
+    "version": "dev-master",
     "autoload": {
         "psr-4": {
             "P2A\\YourMembership\\": "src/"
         }
-    },    
+    },
     "require": {
         "php": ">=7.0.0",
         "nesbot/carbon": "^1.21",
