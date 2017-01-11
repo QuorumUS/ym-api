@@ -10,7 +10,7 @@ class Response
     private $method;
     private $response;
 
-    public function __construct(string $method,  $response)
+    public function __construct(string $method, $response)
     {
         $this->method = $method;
 
@@ -52,7 +52,7 @@ class Response
      */
     public function getError() : string
     {
-        return (string)$this->response->ErrDesc;
+        return (string) $this->response->ErrDesc;
     }
 
     /**
@@ -114,7 +114,7 @@ class Response
 
         if (isset($this->response->{$this->method}->Results)) {
             $attributes = $this->response->{$this->method}->Results->attributes();
-            $count  = (int) $attributes['ResultTotal'] ?? false;
+            $count = (int) $attributes['ResultTotal'] ?? false;
         }
 
         return $count;
