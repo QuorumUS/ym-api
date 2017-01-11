@@ -3,7 +3,8 @@ namespace P2A\YourMembership;
 
 use Illuminate\Support\ServiceProvider;
 
-class YourMembershipServiceProvider extends ServiceProvider {
+class YourMembershipServiceProvider extends ServiceProvider
+{
 
 	/**
 	 * Indicates if loading of the provider is deferred.
@@ -22,10 +23,10 @@ class YourMembershipServiceProvider extends ServiceProvider {
 		//
 	}
 
-    public function boot()
-    {
-        $this->package('phone2action/ym-api');
-    }
+	public function boot()
+	{
+		$this->package('phone2action/ym-api');
+	}
 
 	/**
 	 * Get the services provided by the provider.

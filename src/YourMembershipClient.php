@@ -6,7 +6,8 @@ use GuzzleHttp\Client;
 use P2A\YourMembership\Core\Request;
 use P2A\YourMembership\Core\Response;
 
-class YourMembershipClient {
+class YourMembershipClient
+{
 
     /**
      * Guzzle Client
@@ -36,7 +37,8 @@ class YourMembershipClient {
      * @param  array      $arguments  Your Membership API Call Arguments
      * @return Response
      */
-    public function makeCall(string $method, array $arguments = []) {
+    public function makeCall(string $method, array $arguments = [])
+    {
 
         Request::$callId++; //Update the Call ID as they need to be unique per call
         $request = $this->request->buildRequest($method, $arguments);
@@ -55,7 +57,7 @@ class YourMembershipClient {
      */
     private function createSession() : string
     {
-        $response =  $this->makeCall('Session.Create')->toObject();
+        $response = $this->makeCall('Session.Create')->toObject();
         return $response->SessionID;
 
     }
