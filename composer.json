@@ -26,11 +26,6 @@
         "illuminate/support": "^5.2",
         "guzzlehttp/guzzle": "^6.2"
     },
-    "extra": {
-       "branch-alias": {
-           "dev-master": "dev-master"
-       }
-    },
     "require-dev": {
         "codeception/codeception": "^2.2",
         "codeception/mockery-module": "^0.2.2",
