@@ -9,13 +9,6 @@
             "email": "petr@phone2action.com"
         }
     ],
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/phone2action/ym-api"
-        }
-    ],
-
     "autoload": {
         "psr-4" : {
             "P2A\\YourMembership\\" : "src/"
