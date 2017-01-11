@@ -197,4 +197,4 @@ class Request
         return !is_null(self::$sessionId);
     }
 
-};
+}

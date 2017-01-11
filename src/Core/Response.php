@@ -89,8 +89,8 @@ class Response
      * @throws YourMembershipException
      * @author PA
      * @date   2017-01-11
-     * @param  bool            $asArray [description]
-     * @return [type]                   [description]
+     * @param  bool            $asArray unwrap the object into an array instead of object
+     * @return mixed|null      Unwrapped Response
      */
     private function unwrapXMLObject(bool $asArray)
     {
