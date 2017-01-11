@@ -18,8 +18,7 @@
         "psr-4": {
             "P2A\\YourMembership\\": "src/"
         }
-    },
-    "minimum-stability": "dev",
+    },    
     "require": {
         "php": ">=7.0.0",
         "nesbot/carbon": "^1.21",
