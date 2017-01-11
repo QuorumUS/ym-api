@@ -1,37 +1,18 @@
-## Welcome to GitHub Pages
+# ym-api
 
-You can use the [editor on GitHub](https://github.com/phone2action/ym-api/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/phone2action/ym-api/badges/quality-score.png?b=dev-master)](https://scrutinizer-ci.com/g/phone2action/ym-api/?branch=dev-master) [![Build Status](https://scrutinizer-ci.com/g/phone2action/ym-api/badges/build.png?b=dev-master)](https://scrutinizer-ci.com/g/phone2action/ym-api/build-status/dev-master) [![Code Coverage](https://scrutinizer-ci.com/g/phone2action/ym-api/badges/coverage.png?b=dev-master)](https://scrutinizer-ci.com/g/phone2action/ym-api/?branch=dev-master)
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+Your Membership API Client for PHP
 
-### Markdown
+Work In Progress
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
 
-```markdown
-Syntax highlighted code block
+YourMembershipClient Usage
 
-# Header 1
-## Header 2
-### Header 3
+```$client = new P2A\YourMembership\YourMembershipClient($apiKey, $saPasscode)```
 
-- Bulleted
-- List
 
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
 ```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/phone2action/ym-api/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+$response = $client->makeCall('Session.Create')->toArray();
+echo $response['SessionID'];
+ ```

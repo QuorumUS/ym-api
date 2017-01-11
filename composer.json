@@ -1,0 +1,39 @@
+{
+    "name": "phone2action/ym-api",
+    "description": "YourMembership API PHP Library",
+    "type": "library",
+    "keywords": [
+        "mailchimp",
+        "api",
+        "php",
+        "v3"
+    ],
+    "license": "MIT",
+    "authors": [{
+        "name": "Peter Arapov",
+        "email": "petr@phone2action.com"
+    }],
+
+    "autoload": {
+        "psr-4": {
+            "P2A\\YourMembership\\": "src/"
+        }
+    },
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=7.0.0",
+        "nesbot/carbon": "^1.21",
+        "illuminate/support": "^5.2",
+        "guzzlehttp/guzzle": "^6.2"
+    },
+    "extra": {
+       "branch-alias": {
+           "dev-master": "dev-master"
+       }
+    },
+    "require-dev": {
+        "codeception/codeception": "^2.2",
+        "codeception/mockery-module": "^0.2.2",
+        "codeception/c3": "2.*"
+    }
+}
