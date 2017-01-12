@@ -3,10 +3,10 @@
     "description": "YourMembership API PHP Library",
     "type": "library",
     "keywords": [
-        "mailchimp",
+        "yourmembership",
         "api",
+        "laravel"
         "php",
-        "v3"
     ],
     "license": "MIT",
     "authors": [{
@@ -19,9 +19,10 @@
             "P2A\\YourMembership\\": "src/"
         }
     },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "require": {
-        "php": ">=7.0.0",
-        "nesbot/carbon": "^1.21",
+        "php": ">=7.0.0",        
         "illuminate/support": "^5.2",
         "guzzlehttp/guzzle": "~6.0"
     },
