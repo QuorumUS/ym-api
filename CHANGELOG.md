@@ -12,10 +12,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Populate YourMembershipServiceProvider for Laravel
 - Add minimum-stability for composer.json
 - Added Generic YourMembershipException
+- Added YourMembershipRequestException
 #### Fixed
 - Recursive XML Packaging of API Call Arguments
 #### Changed
-- Rename YourMembershipException to YourMembershipApiException
+- Rename YourMembershipException to YourMembershipResponseException
 #### Removed
 - Carbon\Carbon Dependency (unused)
 # Released
