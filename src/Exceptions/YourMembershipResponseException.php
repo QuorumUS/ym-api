@@ -32,6 +32,6 @@ class YourMembershipResponseException extends YourMembershipException
 	public function __toString()
 	{
 	   return __CLASS__ . ": [{$this->apiMethod}]: {$this->message}\n";
-    }
+	}
 
 }
