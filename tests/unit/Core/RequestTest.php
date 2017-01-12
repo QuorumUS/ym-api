@@ -1,5 +1,6 @@
 <?php
 namespace Core;
+use P2A\YourMembership\Exceptions\YourMembershipException;
 use P2A\YourMembership\Core\Request;
 
 class RequestTest extends \Codeception\Test\Unit
@@ -17,8 +18,27 @@ class RequestTest extends \Codeception\Test\Unit
     protected function _after()
     {
     }
+    /**
+     * Verifies that the XML Element Children match up the arguments array
+     * @method verifyChildren
+     * @author PA
+     * @date   2017-01-12
+     * @param  \SimpleXMLElement         $children
+     * @param  array                     $arguments
+     * @return void
+     */
+    private function verifyChildren($children, array $arguments) {
+        foreach ($children as $key => $value) {
+            $this->assertArrayHasKey($key, $arguments, 'Argument Does Not Exist');
+            if (is_array($arguments[$key])) {
+                $this->verifyChildren($value, $arguments[$key]);
+            } else {
+                $this->assertEquals($value,$arguments[$key], 'Invalid Argument');
+            }
+        }
+    }
 
-
+    // Test
     public function testBuildBasePayload() {
 
         $apiKey = 'A';
@@ -43,7 +63,7 @@ class RequestTest extends \Codeception\Test\Unit
         $apiKey = 'A';
         $saPasscode  ='B';
         $method = 'testMethod';
-        $arguments = ['arg1' => 'value1', 'arg2' => 'value2'];
+        $arguments = ['arg1' => 'value1', 'arg2' => 'value2', 'arg3' => ['r1'=>'a', 'r2'=>'b'], 'b3'=> ['a','b','c']];
         $request = new Request($apiKey, $saPasscode);
         //Execute
         $xml = $request->createCallPayload($method, $arguments);
@@ -57,13 +77,30 @@ class RequestTest extends \Codeception\Test\Unit
         $children = $xml->children();
         //Verify Method Arguments
         //Invert Children and Arguments because Children is not Array Iterable...
-        foreach ($children as $key => $value) {
-                $this->assertArrayHasKey($key, $arguments, 'Argument Does Not Exist');
-                $this->assertEquals($value, $arguments[$key], 'Invalid Argument');
-        }
+
+        $this->verifyChildren($children,$arguments);
 
         codecept_debug($xml->asXML());
     }
+
+    public function testCreateCallPayLoadWithException()
+    {
+        $this->tester->expectException(YourMembershipException::class, function()
+        {
+            //Setup
+            $apiKey = 'A';
+            $saPasscode  ='B';
+            $method = 'testMethod';
+            $arguments = ['arg1' => 'value1', 'arg2' => 'value2', 'arg3' => ['r1'=>'a', 'r2'=>'b'], ['a','b','c']];
+            $request = new Request($apiKey, $saPasscode);
+
+            //Execute
+            $xml = $request->createCallPayload($method, $arguments);
+        });
+
+
+    }
+
 
     public function testBuildXMLBody() {
 
@@ -75,7 +112,7 @@ class RequestTest extends \Codeception\Test\Unit
         $request = new Request($apiKey, $saPasscode);
 
         $xml = $request->buildXMLBody($method, $arguments);
-        codecept_debug($xml->asXML());
+
         //Verify
         $this->assertEquals(Request::API_VERSION, $xml->Version, 'Versions Do Not Match');
         $this->assertEquals($apiKey, $xml->ApiKey, 'API Key Does not Match');
@@ -111,7 +148,7 @@ class RequestTest extends \Codeception\Test\Unit
 
         $request->buildXMLBody($method,$arguments);
 
-        $request = $request->buildRequest($method,$arguments);
+        $request = $request->buildRequest($method, $arguments);
 
         $this->assertInstanceOf(\GuzzleHttp\Psr7\Request::class, $request);
 
@@ -124,5 +161,7 @@ class RequestTest extends \Codeception\Test\Unit
         $this->assertTrue(Request::hasSession());
 
     }
+
+
 
 }

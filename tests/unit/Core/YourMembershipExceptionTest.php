@@ -1,9 +1,9 @@
 <?php
 namespace Core;
 
-use P2A\YourMembership\Core\YourMembershipException;
+use P2A\YourMembership\Exceptions\YourMembershipApiException;
 
-class YourMembershipExceptionTest extends \Codeception\Test\Unit
+class YourMembershipApiExceptionTest extends \Codeception\Test\Unit
 {
     /**
      * @var \UnitTester
@@ -22,8 +22,10 @@ class YourMembershipExceptionTest extends \Codeception\Test\Unit
     // tests
     public function testToString()
     {
-        $exception = new YourMembershipException('Message', 999, 'TestMethod');
+        //setup
+        $exception = new YourMembershipApiException('Message', 999, 'TestMethod');
 
+        //verify
         echo $exception;
     }
 }

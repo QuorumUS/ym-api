@@ -4,7 +4,7 @@ namespace Core;
 use GuzzleHttp\Psr7\Response as GuzzleResponse;
 
 use P2A\YourMembership\Core\Response;
-use P2A\YourMembership\Core\YourMembershipException;
+use P2A\YourMembership\Exceptions\YourMembershipApiException;
 
 class ResponseTest extends \Codeception\Test\Unit
 {
@@ -110,7 +110,7 @@ EOD;
         $response = $this->makeResponse('Member.Profile.Get', $this->errorResponseXML);
 
         //Execute and Verify
-        $this->tester->expectException(YourMembershipException::class, function() use ($response)
+        $this->tester->expectException(YourMembershipApiException::class, function() use ($response)
         {
             $a = $response->toArray();
         });

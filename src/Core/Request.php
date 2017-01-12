@@ -3,7 +3,7 @@
 namespace P2A\YourMembership\Core;
 
 use GuzzleHttp\Psr7\Request as GuzzleRequest;
-
+use P2A\YourMembership\Exceptions\YourMembershipException;
 
 class Request
 {
@@ -85,13 +85,39 @@ class Request
         $call->addAttribute('Method', $method);
 
         //Add Arguments to the Call Node
-        foreach ($arguments as $key => $value) {
-            $call->addChild($key, $value);
-        }
+
+        $call = $this->sxmlAddChildrenRecursive($call,$arguments);
 
         return $call;
     }
+    /**
+     * Recursively builds the array into a XML Tree
+     * //NOTE Child arrays must be associative
+     * @method sxmlAddChildrenRecursive
+     * @author PA
+     * @date   2017-01-12
+     * @param  SimpleXMLElement         $root      Root XML Node
+     * @param  array                    $arguments Array of Arguments to be added to XML Node
+     * @return SimpleXMLElement                    Resulting XML Tree
+     */
+    private function sxmlAddChildrenRecursive(\SimpleXMLElement $root, array $arguments) : \SimpleXMLElement
+    {
+        foreach ($arguments as $key => $value) {
+            if (is_array($value)) {
+                try {
+                    $child = new \SimpleXMLElement(sprintf('<%s></%s>',$key, $key));
+                    $this->sxmlAddChildrenRecursive($child, $value);
+                    $this->sxmlAppend($root,$child);
+                } catch(\Exception $e) {
+                    throw new YourMembershipException($e->getMessage(), $e->getCode(), $e);
+                }
+            } else {
+                $root->addChild($key, $value);
+            }
 
+        }
+        return $root;
+    }
     /**
      * Builds The XML Request Body for the Your Membership API Call
      * @method buildXMLBody

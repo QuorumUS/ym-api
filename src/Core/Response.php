@@ -2,6 +2,7 @@
 
 namespace P2A\YourMembership\Core;
 
+use P2A\YourMembership\Exceptions\YourMembershipApiException;
 /**
  * Your Membership Response Object
  */
@@ -96,7 +97,7 @@ class Response
     {
         //We cannot unwrap objects that have errors, so throw an exception
         if ($this->hasError()) {
-            throw new YourMembershipException($this->getError(), $this->getErrorCode(), $this->method);
+            throw new YourMembershipApiException($this->getError(), $this->getErrorCode(), $this->method);
         }
 
         return json_decode(json_encode($this->response->{$this->method}), $asArray);
