@@ -2,7 +2,7 @@
 namespace P2A\YourMembership\Exceptions;
 
 /**
- * Generic YourMembershipException
+ * Generic YourMembership Exception
  *
  * Used typically for errors dealing with XML Parsing Issues
  *

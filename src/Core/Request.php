@@ -3,7 +3,7 @@
 namespace P2A\YourMembership\Core;
 
 use GuzzleHttp\Psr7\Request as GuzzleRequest;
-use P2A\YourMembership\Exceptions\YourMembershipException;
+use P2A\YourMembership\Exceptions\YourMembershipRequestException;
 
 class Request
 {
@@ -73,6 +73,7 @@ class Request
      * Generates the XML for a API method call within
      * @method createCallPayload
      * @author PA
+     * @throws YourMembershipRequestException
      * @date   2017-01-09
      * @param  string            $method    YourMembership API Function Name
      * @param  array             $arguments Array of Arguments to be passed as part of the YourMembership "Call"
@@ -85,9 +86,11 @@ class Request
         $call->addAttribute('Method', $method);
 
         //Add Arguments to the Call Node
-
-        $call = $this->sxmlAddChildrenRecursive($call,$arguments);
-
+        try {
+            $call = $this->sxmlAddChildrenRecursive($call,$arguments);
+        } catch(\Exception $e) {
+            throw new YourMembershipRequestException($e->getMessage(), $e->getCode(), $method, $arguments, $e);
+        }
         return $call;
     }
     /**
@@ -104,13 +107,9 @@ class Request
     {
         foreach ($arguments as $key => $value) {
             if (is_array($value)) {
-                try {
-                    $child = new \SimpleXMLElement(sprintf('<%s></%s>',$key, $key));
-                    $this->sxmlAddChildrenRecursive($child, $value);
-                    $this->sxmlAppend($root,$child);
-                } catch(\Exception $e) {
-                    throw new YourMembershipException($e->getMessage(), $e->getCode(), $e);
-                }
+                $child = new \SimpleXMLElement(sprintf('<%s></%s>',$key, $key));
+                $this->sxmlAddChildrenRecursive($child, $value);
+                $this->sxmlAppend($root,$child);
             } else {
                 $root->addChild($key, $value);
             }

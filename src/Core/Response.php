@@ -2,7 +2,7 @@
 
 namespace P2A\YourMembership\Core;
 
-use P2A\YourMembership\Exceptions\YourMembershipApiException;
+use P2A\YourMembership\Exceptions\YourMembershipResponseException;
 /**
  * Your Membership Response Object
  */
@@ -59,7 +59,7 @@ class Response
     /**
      * Converts the response to an Array
      * @method toArray
-     * @throws YourMembershipException
+     * @throws YourMembershipRequestException
      * @author PA
      * @date   2017-01-10
      * @return array      Response
@@ -72,7 +72,7 @@ class Response
     /**
      * Converts the response to an Object
      * @method toObject
-     * @throws YourMembershipException
+     * @throws YourMembershipRequestException
      * @author PA
      * @date   2017-01-11
      * @return stdClass  Response
@@ -87,7 +87,7 @@ class Response
      * Lossy conversion, attributes are lost from XML
      *
      * @method unwrapXMLObject
-     * @throws YourMembershipException
+     * @throws YourMembershipRequestException
      * @author PA
      * @date   2017-01-11
      * @param  bool            $asArray unwrap the object into an array instead of object
@@ -97,7 +97,7 @@ class Response
     {
         //We cannot unwrap objects that have errors, so throw an exception
         if ($this->hasError()) {
-            throw new YourMembershipApiException($this->getError(), $this->getErrorCode(), $this->method);
+            throw new YourMembershipResponseException($this->getError(), $this->getErrorCode(), $this->method);
         }
 
         return json_decode(json_encode($this->response->{$this->method}), $asArray);
