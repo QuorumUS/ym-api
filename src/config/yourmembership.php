@@ -1,16 +1,15 @@
 <?php
-    /**
-     * Your Membership Settings
-     *
-
-     */
+	/**
+	 * Your Membership Settings
+	 *
+	 */
 return [
-     /**
-      * Default Guzzle Client Settings used by the provider
-      */
-    'guzzle-client' => [
-            'base_uri' => null,
-            'timeout' => 5.0
-    ],
+	 /**
+	  * Default Guzzle Client Settings used by the provider
+	  */
+	'guzzle-client' => [
+			'base_uri' => null,
+			'timeout' => 5.0
+	],
 
 ];
