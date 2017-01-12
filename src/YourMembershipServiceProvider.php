@@ -28,10 +28,8 @@ class YourMembershipServiceProvider extends ServiceProvider
 		);
 
 		$this->app->register(YourMembershipClient::class, function($app, $parameters) {
-
 			$guzzleClient = new \GuzzleHttp\Client($app['config']['yourmembership']['guzzle-client']);
-
-			return new YourMembershipClient($guzzleClient, $parameters[0], $parameters[1])
+			return new YourMembershipClient($guzzleClient, $parameters[0], $parameters[1]);
 		});
 	}
 
