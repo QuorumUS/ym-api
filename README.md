@@ -16,8 +16,8 @@ Require this package with composer by adding the following to your composer file
 
 ```json
 {
-require: {
-"phone2action/ym-api": "dev-master"
+"require": {
+    "phone2action/ym-api": "dev-master"
 },
 "repositories": [
 
@@ -64,5 +64,5 @@ $response = $client->makeCall('Session.Create')->toArray();
 echo $response['SessionID'];
 
 $response = $client->makeCall('Session.Create')->toObject();
-echo $response['SessionID'];
+echo $response->SessionID;
 ```
