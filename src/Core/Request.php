@@ -89,7 +89,7 @@ class Request
         try {
             $call = $this->sxmlAddChildrenRecursive($call, $arguments);
         } catch (\Exception $e) {
-            throw new YourMembershipRequestException($e->getMessage(), $e->getCode(), $method, $arguments, $e);
+            throw new YourMembershipRequestException($e->getMessage(), $e->getCode(), $e);
         }
         return $call;
     }
@@ -98,6 +98,7 @@ class Request
      * //NOTE Child arrays must be associative
      * @method sxmlAddChildrenRecursive
      * @author PA
+     * @throws \Exception XML Parsing Exception
      * @date   2017-01-12
      * @param  \SimpleXMLElement         $root      Root XML Node
      * @param  array                    $arguments Array of Arguments to be added to XML Node

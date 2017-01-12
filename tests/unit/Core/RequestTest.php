@@ -82,23 +82,20 @@ class RequestTest extends \Codeception\Test\Unit
 
         codecept_debug($xml->asXML());
     }
-
+    /**
+     * @expectedException \P2A\YourMembership\Exceptions\YourMembershipRequestException
+     */
     public function testCreateCallPayLoadWithException()
     {
-        $this->tester->expectException(YourMembershipRequestException::class, function()
-        {
-            //Setup
-            $apiKey = 'A';
-            $saPasscode  ='B';
-            $method = 'testMethod';
-            $arguments = ['arg1' => 'value1', 'arg2' => 'value2', 'arg3' => ['r1'=>'a', 'r2'=>'b'], ['a','b','c']];
-            $request = new Request($apiKey, $saPasscode);
+        //Setup
+        $apiKey = 'A';
+        $saPasscode  ='B';
+        $method = 'testMethod';
+        $arguments = ['arg1' => 'value1', 'arg2' => 'value2', 'arg3' => ['r1'=>'a', 'r2'=>'b'], ['a','b','c']];
+        $request = new Request($apiKey, $saPasscode);
 
-            //Execute
-            $xml = $request->createCallPayload($method, $arguments);
-        });
-
-
+        //Execute
+        $xml = $request->createCallPayload($method, $arguments);
     }
 
 

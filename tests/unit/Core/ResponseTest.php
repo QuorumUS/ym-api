@@ -104,16 +104,16 @@ EOD;
         //Verify
         $this->assertEquals('Method requires authentication.', $response->getError());
     }
-
+    /**
+     * @expectedException \P2A\YourMembership\Exceptions\YourMembershipResponseException
+     */
     public function testToArrayWithError() {
         //Setup
         $response = $this->makeResponse('Member.Profile.Get', $this->errorResponseXML);
 
         //Execute and Verify
-        $this->tester->expectException(YourMembershipResponseException::class, function() use ($response)
-        {
-            $a = $response->toArray();
-        });
+        $a = $response->toArray();
+
     }
     public function testToArray()
     {
