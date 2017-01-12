@@ -1,6 +1,6 @@
 <?php
 namespace Core;
-use P2A\YourMembership\Exceptions\YourMembershipException;
+use P2A\YourMembership\Exceptions\YourMembershipRequestException;
 use P2A\YourMembership\Core\Request;
 
 class RequestTest extends \Codeception\Test\Unit
@@ -85,7 +85,7 @@ class RequestTest extends \Codeception\Test\Unit
 
     public function testCreateCallPayLoadWithException()
     {
-        $this->tester->expectException(YourMembershipException::class, function()
+        $this->tester->expectException(YourMembershipRequestException::class, function()
         {
             //Setup
             $apiKey = 'A';
