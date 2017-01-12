@@ -18,3 +18,4 @@ coverage:
         - src/*
     exclude:
         - src/YourMembershipServiceProvider.php
+        - src/config/*

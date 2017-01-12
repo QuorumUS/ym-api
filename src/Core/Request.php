@@ -3,56 +3,56 @@
 namespace P2A\YourMembership\Core;
 
 use GuzzleHttp\Psr7\Request as GuzzleRequest;
-
+use P2A\YourMembership\Exceptions\YourMembershipRequestException;
 
 class Request
 {
 
-    /**
-     * Base URL
-     * @var string
-     */
-    const BASE_URL = 'https://api.yourmembership.com';
-    const API_VERSION = '2.25';
+	/**
+	 * Base URL
+	 * @var string
+	 */
+	const BASE_URL = 'https://api.yourmembership.com';
+	const API_VERSION = '2.25';
 
-    /**
-     * Session ID use for YourMembership API
-     * @var string
-     */
-    private static $sessionId = null;
-    /**
-     * Call Counter for Your Membership for a given session
-     * @var integer
-     */
-    public static $callId = 0;
-    /**
-     * API Key Used for YourMembership API
-     * @var string
-     */
-    private $apiKey;
-    /**
-     * Sa Passcode is a supplementary API key used for YourMembership API
-     * @var string
-     */
-    private $saPasscode;
+	/**
+	 * Session ID use for YourMembership API
+	 * @var string
+	 */
+	private static $sessionId = null;
+	/**
+	 * Call Counter for Your Membership for a given session
+	 * @var integer
+	 */
+	public static $callId = 0;
+	/**
+	 * API Key Used for YourMembership API
+	 * @var string
+	 */
+	private $apiKey;
+	/**
+	 * Sa Passcode is a supplementary API key used for YourMembership API
+	 * @var string
+	 */
+	private $saPasscode;
 
 
-    public function __construct(string $apiKey, string $saPasscode)
-    {
-        $this->apiKey = $apiKey;
-        $this->saPasscode = $saPasscode;
-    }
+	public function __construct(string $apiKey, string $saPasscode)
+	{
+		$this->apiKey = $apiKey;
+		$this->saPasscode = $saPasscode;
+	}
 
-    /**
-     * Create the Base Envelope for an API call to YourMembership
-     * @method buildBasePayload
-     * @author PA
-     * @date   2017-01-09
-     * @return \SimpleXMLElement  XML Envelope with necessary credential parameters
-     */
-    public function buildBasePayload() : \SimpleXMLElement
-    {
-        /*
+	/**
+	 * Create the Base Envelope for an API call to YourMembership
+	 * @method buildBasePayload
+	 * @author PA
+	 * @date   2017-01-09
+	 * @return \SimpleXMLElement  XML Envelope with necessary credential parameters
+	 */
+	public function buildBasePayload() : \SimpleXMLElement
+	{
+		/*
             <YourMembership>
             <Version>2.25</Version>
             <ApiKey>3D638C5F-CCE2-4638-A2C1-355FA7BBC917</ApiKey>
@@ -73,6 +73,7 @@ class Request
      * Generates the XML for a API method call within
      * @method createCallPayload
      * @author PA
+     * @throws YourMembershipRequestException
      * @date   2017-01-09
      * @param  string            $method    YourMembership API Function Name
      * @param  array             $arguments Array of Arguments to be passed as part of the YourMembership "Call"
@@ -85,13 +86,38 @@ class Request
         $call->addAttribute('Method', $method);
 
         //Add Arguments to the Call Node
-        foreach ($arguments as $key => $value) {
-            $call->addChild($key, $value);
+        try {
+            $call = $this->sxmlAddChildrenRecursive($call, $arguments);
+        } catch (\Exception $e) {
+            throw new YourMembershipRequestException($e->getMessage(), $e->getCode(), $e);
         }
-
         return $call;
     }
+    /**
+     * Recursively builds the array into a XML Tree
+     * //NOTE Child arrays must be associative
+     * @method sxmlAddChildrenRecursive
+     * @author PA
+     * @throws \Exception XML Parsing Exception
+     * @date   2017-01-12
+     * @param  \SimpleXMLElement         $root      Root XML Node
+     * @param  array                    $arguments Array of Arguments to be added to XML Node
+     * @return \SimpleXMLElement                    Resulting XML Tree
+     */
+    private function sxmlAddChildrenRecursive(\SimpleXMLElement $root, array $arguments) : \SimpleXMLElement
+    {
+        foreach ($arguments as $key => $value) {
+            if (is_array($value)) {
+                $child = new \SimpleXMLElement(sprintf('<%s></%s>', $key, $key));
+                $this->sxmlAddChildrenRecursive($child, $value);
+                $this->sxmlAppend($root, $child);
+            } else {
+                $root->addChild($key, $value);
+            }
 
+        }
+        return $root;
+    }
     /**
      * Builds The XML Request Body for the Your Membership API Call
      * @method buildXMLBody
@@ -154,7 +180,8 @@ class Request
      * @param  \SimpleXMLElement $from
      * @return void
      */
-    private function sxmlAppend(\SimpleXMLElement $to, \SimpleXMLElement $from) {
+    private function sxmlAppend(\SimpleXMLElement $to, \SimpleXMLElement $from)
+    {
         $toDom = dom_import_simplexml($to);
         $fromDom = dom_import_simplexml($from);
         $toDom->appendChild($toDom->ownerDocument->importNode($fromDom, true));
