@@ -2,16 +2,19 @@
 namespace P2A\YourMembership;
 
 use Illuminate\Support\ServiceProvider;
+use P2A\YourMembership\YourMembershipClient;
 
 class YourMembershipServiceProvider extends ServiceProvider
 {
 
+	private $packageName = 'yourmembership';
+	private $packageConfigPath = __DIR__.'/config/yourmembership.php';
 	/**
 	 * Indicates if loading of the provider is deferred.
 	 *
 	 * @var bool
 	 */
-	protected $defer = false;
+	protected $defer = true;
 
 	/**
 	 * Register the service provider.
@@ -20,12 +23,23 @@ class YourMembershipServiceProvider extends ServiceProvider
 	 */
 	public function register()
 	{
-		//
+		$this->mergeConfigFrom(
+	    	$this->packageConfigPath, $this->packageName
+		);
+
+		$this->app->register(YourMembershipClient::class, function($app, $parameters) {
+
+			$guzzleClient = new \GuzzleHttp\Client($app['config']['yourmembership']['guzzle-client']);
+
+			return new YourMembershipClient($guzzleClient, $parameters[0], $parameters[1])
+		});
 	}
 
 	public function boot()
 	{
-		$this->package('phone2action/ym-api');
+		$this->publishes([
+		$this->packageConfigPath => config_path('yourmembership.php'),
+		]);
 	}
 
 	/**
@@ -35,7 +49,7 @@ class YourMembershipServiceProvider extends ServiceProvider
 	 */
 	public function provides()
 	{
-		return array();
+		return array(YourMembershipClient::class);
 	}
 
 }
