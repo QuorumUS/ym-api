@@ -35,7 +35,7 @@ class YourMembershipServiceProvider extends ServiceProvider
 		);
 
 		$this->app->bind(YourMembershipClient::class, function ($app, $parameters) {
-			$guzzleClient = new \GuzzleHttp\Client($app['config']['yourmembership']['guzzle-client']);
+			$guzzleClient = app(\GuzzleHttp\Client::class, [$app['config']['yourmembership']['guzzle-client']]);
 			return new YourMembershipClient($guzzleClient, $parameters[0], $parameters[1]);
 		});
 	}
