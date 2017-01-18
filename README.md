@@ -25,7 +25,7 @@ Require this package with composer by adding the following to your composer file
             "type": "vcs",
             "url": "https://github.com/phone2action/ym-api"
         }
-    ],
+    ]
 }
 ```
 After updating composer, add the service provider to the `providers` array in `config/app.php`
