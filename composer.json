@@ -13,7 +13,7 @@
         "name": "Peter Arapov",
         "email": "petr@phone2action.com"
     }],
-    "version": "0.2",
+    "version": "0.2.1",
     "autoload": {
         "psr-4": {
             "P2A\\YourMembership\\": "src/"
