@@ -53,6 +53,14 @@ private $goodSessionResponse = <<<'EOD'
 </Session.Create>
 </YourMembership_Response>
 EOD;
+
+    private $badResponseXML = <<<'EOD'
+<?xml version="1.0" encoding="utf-8" ?>
+<YourMembership_Response>
+<ErrCode>404</ErrCode>
+<ErrDesc>Some Error Message</ErrDesc>
+</YourMembership_Response>
+EOD;
     /**
      * @var \UnitTester
      */
@@ -87,4 +95,28 @@ EOD;
     }
 
 
+    /**
+     * @expectedException \P2A\YourMembership\Exceptions\YourMembershipResponseException
+     * @expectedExceptionCode 404
+     * @expectedExceptionMessage Some Error Message
+     */
+    public function testMakeCallHasException()
+    {
+        // Mock the Guzzle Client
+        $mock = new MockHandler([
+            new GuzzleResponse(200, ['X-Foo' => 'Bar'] , $this->goodSessionResponse),
+            new GuzzleResponse(200, ['X-Foo' => 'Bar'] , $this->badResponseXML)
+        ]);
+
+        $handler = HandlerStack::create($mock);
+        $client = new Client(['handler' => $handler]);
+
+        $yourMembershipClient = new YourMembershipClient($client, 'a', 'b');
+
+        //When
+        $response = $yourMembershipClient->makeCall('a', []);
+
+        //Then
+        //Verify an exception is thrown with the error code and description from the error xml
+    }
 }
