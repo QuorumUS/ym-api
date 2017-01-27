@@ -33,12 +33,12 @@ class YourMembershipClient
 	 * Makes API Call to YourMembership
 	 * @method makeCall
 	 * @author PA
-     * @author AB http://github.com/chefboyarsky
+	 * @author AB http://github.com/chefboyarsky
 	 * @date   2017-01-10
 	 * @param  string     $method    Your Membership API Method
 	 * @param  array      $arguments  Your Membership API Call Arguments
 	 * @return Response
-     * @throws YourMembershipResponseException If the response from the API has an error
+	 * @throws YourMembershipResponseException If the response from the API has an error
 	 */
 	public function makeCall(string $method, array $arguments = [])
 	{
@@ -48,10 +48,10 @@ class YourMembershipClient
 
 		$response = new Response($method, $this->client->send($request));
 
-        if($response->hasError())
-        {
-            throw new YourMembershipResponseException($response->getError(), $response->getErrorCode(), $method);
-        }
+		if($response->hasError())
+		{
+			throw new YourMembershipResponseException($response->getError(), $response->getErrorCode(), $method);
+		}
 
 		return $response;
 	}
