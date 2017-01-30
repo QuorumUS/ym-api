@@ -53,14 +53,24 @@ class Response
 	 */
 	public function getError() : string
 	{
-	    $extendedErrorInfo = isset($this->response->ExtendedErrorInfo) ? (string) $this->response->ExtendedErrorInfo : '';
-	    $error = isset($this->response->ErrDesc) ? (string) $this->response->ErrDesc : '';
-	    if ($extendedErrorInfo) {
-	        $error .= " ($extendedErrorInfo)";
+	    $error = (string) $this->response->ErrDesc;
+	    if ($extendedError = $this->getExtendedError()) {
+	        $error .= " ($extendedError)";
         }
 
 		return $error;
 	}
+
+    /**
+     * Fetches the Extended Error from the Response
+     * @return string
+     * @author TLS
+     * @date   1-30-2017
+     */
+	public function getExtendedError() : string
+    {
+        return isset($this->response->ExtendedErrorInfo) ? (string) $this->response->ExtendedErrorInfo : '';
+    }
 
 	/**
 	 * Converts the response to an Array
