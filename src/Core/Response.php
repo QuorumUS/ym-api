@@ -54,7 +54,10 @@ class Response
 	public function getError() : string
 	{
 	    $error = (string) $this->response->ErrDesc;
-	    if ($extendedError = $this->getExtendedError()) {
+
+		$extendedError = $this->getExtendedError();
+
+	    if ($extendedError) {
 	        $error .= " ($extendedError)";
         }
 

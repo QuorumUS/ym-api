@@ -135,7 +135,7 @@ EOD;
         $response = $this->makeResponse('Member.Profile.Get', $this->errorResponseWithExtendedErrorXML);
 
         //Verify
-        $this->assertEquals('Method requires authentication. ([GroupCode] is invalid; it must be unique)', $response->getError());
+        $this->assertEquals('[GroupCode] is invalid; it must be unique', $response->getExtendedError());
     }
 
 
