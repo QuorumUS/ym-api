@@ -59,7 +59,7 @@ class Response
 	/**
 	 * Converts the response to an Array
 	 * @method toArray
-	 * @throws YourMembershipRequestException
+	 * @throws YourMembershipResponseException
 	 * @author PA
 	 * @date   2017-01-10
 	 * @return array      Response
@@ -72,7 +72,7 @@ class Response
 	/**
 	 * Converts the response to an Object
 	 * @method toObject
-	 * @throws YourMembershipRequestException
+	 * @throws YourMembershipResponseException
 	 * @author PA
 	 * @date   2017-01-11
 	 * @return stdClass  Response
@@ -87,7 +87,7 @@ class Response
 	 * Lossy conversion, attributes are lost from XML
 	 *
 	 * @method unwrapXMLObject
-	 * @throws YourMembershipRequestException
+	 * @throws YourMembershipResponseException
 	 * @author PA
 	 * @date   2017-01-11
 	 * @param  bool            $asArray unwrap the object into an array instead of object
