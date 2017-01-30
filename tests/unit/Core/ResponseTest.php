@@ -30,6 +30,24 @@ class ResponseTest extends \Codeception\Test\Unit
 </YourMembership_Response>
 EOD;
 
+    private $errorResponseWithExtendedErrorXML = <<<'EOD'
+<?xml version="1.0" encoding="utf-8" ?>
+<YourMembership_Response>
+<ErrCode>403</ErrCode>
+<ExtendedErrorInfo>[GroupCode] is invalid; it must be unique</ExtendedErrorInfo>
+<ErrDesc>Method requires authentication.</ErrDesc>
+<XmlRequest>
+<YourMembership>
+<Version>2.25</Version>
+<ApiKey>3D638C5F-CCE2-4638-A2C1-355FA7BBC917</ApiKey>
+<CallID>001</CallID>
+<SessionID>A07C3BCC-0B39-4977-9E64-C00E918D572E</SessionID>
+<Call Method="Member.Profile.Get"></Call>
+</YourMembership>
+</XmlRequest>
+</YourMembership_Response>
+EOD;
+
 private $goodResponseXML = <<<'EOD'
 <?xml version="1.0" encoding="utf-8" ?>
 
@@ -103,7 +121,24 @@ EOD;
 
         //Verify
         $this->assertEquals('Method requires authentication.', $response->getError());
+
+        //Setup
+        $response = $this->makeResponse('Member.Profile.Get', $this->errorResponseWithExtendedErrorXML);
+
+        //Verify
+        $this->assertEquals('Method requires authentication. ([GroupCode] is invalid; it must be unique)', $response->getError());
     }
+
+    public function testGetExtendedError()
+    {
+        //Setup
+        $response = $this->makeResponse('Member.Profile.Get', $this->errorResponseWithExtendedErrorXML);
+
+        //Verify
+        $this->assertEquals('[GroupCode] is invalid; it must be unique', $response->getExtendedError());
+    }
+
+
     /**
      * @expectedException \P2A\YourMembership\Exceptions\YourMembershipResponseException
      */

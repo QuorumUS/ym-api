@@ -45,7 +45,7 @@ class Response
 	}
 
 	/**
-	 * Fetches the Error Message From Response
+	 * Fetches the Error Message (including Extended Error Info) From Response
 	 * @method getError
 	 * @author PA
 	 * @date   2017-01-10
@@ -53,13 +53,32 @@ class Response
 	 */
 	public function getError() : string
 	{
-		return (string) $this->response->ErrDesc;
+	    $error = (string) $this->response->ErrDesc;
+
+		$extendedError = $this->getExtendedError();
+
+	    if ($extendedError) {
+	        $error .= " ($extendedError)";
+        }
+
+		return $error;
 	}
+
+    /**
+     * Fetches the Extended Error from the Response
+     * @return string
+     * @author TLS
+     * @date   1-30-2017
+     */
+	public function getExtendedError() : string
+    {
+        return isset($this->response->ExtendedErrorInfo) ? (string) $this->response->ExtendedErrorInfo : '';
+    }
 
 	/**
 	 * Converts the response to an Array
 	 * @method toArray
-	 * @throws YourMembershipRequestException
+	 * @throws YourMembershipResponseException
 	 * @author PA
 	 * @date   2017-01-10
 	 * @return array      Response
@@ -72,7 +91,7 @@ class Response
 	/**
 	 * Converts the response to an Object
 	 * @method toObject
-	 * @throws YourMembershipRequestException
+	 * @throws YourMembershipResponseException
 	 * @author PA
 	 * @date   2017-01-11
 	 * @return stdClass  Response
@@ -87,7 +106,7 @@ class Response
 	 * Lossy conversion, attributes are lost from XML
 	 *
 	 * @method unwrapXMLObject
-	 * @throws YourMembershipRequestException
+	 * @throws YourMembershipResponseException
 	 * @author PA
 	 * @date   2017-01-11
 	 * @param  bool            $asArray unwrap the object into an array instead of object
