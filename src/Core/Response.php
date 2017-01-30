@@ -45,7 +45,7 @@ class Response
 	}
 
 	/**
-	 * Fetches the Error Message From Response
+	 * Fetches the Error Message (including Extended Error Info) From Response
 	 * @method getError
 	 * @author PA
 	 * @date   2017-01-10
@@ -53,7 +53,13 @@ class Response
 	 */
 	public function getError() : string
 	{
-		return (string) $this->response->ErrDesc;
+	    $extendedErrorInfo = isset($this->response->ExtendedErrorInfo) ? (string) $this->response->ExtendedErrorInfo : '';
+	    $error = isset($this->response->ErrDesc) ? (string) $this->response->ErrDesc : '';
+	    if ($extendedErrorInfo) {
+	        $error .= " ($extendedErrorInfo)";
+        }
+
+		return $error;
 	}
 
 	/**
